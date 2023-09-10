@@ -2,11 +2,11 @@
 
 <div id="main">
     <h1>Timer</h1>
-    <div>
+    <nav>
         <a href="/stopwatch">Stopwatch</a>
         <a href="/clock">Clock</a>
         <a href="/">Home</a>
-    </div>
+    </nav>
 </div>
 
 <style></style>

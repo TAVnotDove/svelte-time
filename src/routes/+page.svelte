@@ -13,11 +13,11 @@
 
 <div id="main">
     <button on:click={addOne}>Clicked {count} Times</button>
-    <div>
+    <nav>
         <a href="/stopwatch">Stopwatch</a>
         <a href="/clock">Clock</a>
         <a href="/timer">Timer</a>
-    </div>
+    </nav>
 </div>
 
 <style>
