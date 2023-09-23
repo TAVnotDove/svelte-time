@@ -12,6 +12,7 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p> -->
 
 <div id="main">
+    <h1>Home</h1>
     <button on:click={addOne}>Clicked {count} Times</button>
     <nav>
         <a href="/stopwatch">Stopwatch</a>

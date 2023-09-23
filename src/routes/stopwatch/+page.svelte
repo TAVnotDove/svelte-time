@@ -95,6 +95,7 @@
         padding: 0.5rem;
         height: 100px;
         border-radius: 10%;
+        border: 1px solid black;
     }
 
     p {
