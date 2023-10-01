@@ -8,6 +8,7 @@
     let minutes = 0
     let seconds = 0
     let intervalRef = null
+    let animationDuration = 10
 
     function showDisplay() {
         timerMode = "display"
@@ -26,35 +27,43 @@
             seconds = `0${seconds}`
         }
 
-        intervalRef = setInterval(() => {
+        if (timerStyle === 'Default') {
+            intervalRef = setInterval(() => {
+                let numberHours = Number(hours)
+                let numberMinutes = Number(minutes)
+                let numberSeconds = Number(seconds)
+
+                if (numberMinutes + numberSeconds === 0) {             
+                    if (numberHours === 0) {
+                        return clearInterval(intervalRef)
+                    } else if (numberHours === 1) {
+                        hours = "00"
+                    } else {
+                        numberHours--
+                        hours = numberHours > 9 ? `${numberHours}` : `0${numberHours}`
+                    }
+
+                    minutes = "59"
+                    seconds = "59"
+                } else {
+                    if (numberSeconds === 0) {
+                        numberMinutes--
+                        minutes = numberMinutes > 9 ? `${numberMinutes}` : `0${numberMinutes}`
+
+                        seconds = "59"
+                    } else {
+                        numberSeconds--
+                        seconds = numberSeconds > 9 ? `${numberSeconds}` : `0${numberSeconds}`
+                    }
+                }
+            }, 1000);
+        } else {
             let numberHours = Number(hours)
             let numberMinutes = Number(minutes)
             let numberSeconds = Number(seconds)
 
-            if (numberMinutes + numberSeconds === 0) {             
-                if (numberHours === 0) {
-                    return clearInterval(intervalRef)
-                } else if (numberHours === 1) {
-                    hours = "00"
-                } else {
-                    numberHours--
-                    hours = numberHours > 9 ? `${numberHours}` : `0${numberHours}`
-                }
-
-                minutes = "59"
-                seconds = "59"
-            } else {
-                if (numberSeconds === 0) {
-                    numberMinutes--
-                    minutes = numberMinutes > 9 ? `${numberMinutes}` : `0${numberMinutes}`
-
-                    seconds = "59"
-                } else {
-                    numberSeconds--
-                    seconds = numberSeconds > 9 ? `${numberSeconds}` : `0${numberSeconds}`
-                }
-            }
-        }, 1000);
+            animationDuration =  (numberHours * 3600)  + (numberMinutes * 60) + numberSeconds
+        }
     }
 
     function showEdit() {
@@ -68,7 +77,17 @@
     }
 
     function changeStyle() {
-        timerStyle = timerStyle === "Default" ? "Hourglass" : "Default"
+        if (timerStyle === "Default") {
+            timerStyle = "Hourglass"
+        } else {
+            if (timerMode === "edit") {
+                timerStyle = "Default"
+            } else {
+                timerMode = "edit"
+            }
+        }
+
+        clearInterval(intervalRef)
     }
 </script>
 
@@ -113,10 +132,8 @@
                     style="display:inline;fill:#111111;stroke:none"
                     d="M 0,0 C 0,12.1437 3.6723,24.9486 12.1667,34 17.1744,39.3361 27.868,42.0721 27,51 26.2768,58.4388 17.5663,60.4337 13,65 3.93963,74.0604 0,87.5184 0,100 H 75 C 75,87.6605 71.119,75.3723 62.8333,66 57.9549,60.4817 47.1289,57.96 48,49 48.7117,41.6794 57.4591,39.5409 62,35 71.0134,25.9866 75,12.4079 75,0 H 0 M 73,2 C 73,8.82333 71.7763,15.7678 68.8333,22 59.8881,40.9429 35.6186,50.1253 18,36.6667 7.19962,28.4164 2,15.2891 2,2 h 71 m 0,96 H 2 C 2,91.1767 3.22369,84.2322 6.16667,78 15.1119,59.0571 39.3814,49.8747 57,63.3333 67.8004,71.5836 73,84.7109 73,98 Z" />
                 </svg>
-                <!-- default: top: 10px; height: 41px; empty: top: 51px; height: 0px;-->
-                <div style="top: 10px; height: 41px" class="top-sand"></div>
-                <!-- default: top: 106px; height: 0px; full: top: 65px; height: 41px;-->
-                <div style="top: 106px; height: 0px" class="bottom-sand"></div>
+                <div style={"top: 10px; height: 41px;" + ` --animation-duration: ${animationDuration}s`} class="top-sand sand-down"></div>
+                <div style={"top: 106px; height: 0px;" + ` --animation-duration: ${animationDuration}s`} class="bottom-sand sand-up"></div>
             {/if}
         {/if}
     </div>
@@ -129,6 +146,10 @@
 </div>
 
 <style>
+    :root {
+        --animation-duration: 0s;
+    }
+
     #timer-container {
         display: flex;
         flex-direction: column;
@@ -170,5 +191,27 @@
         background-color: beige;
         position: absolute;
         left: 10px;
+    }
+
+    @keyframes down {
+        100% {
+            top: 51px;
+            height: 0px;
+        }
+    }
+
+    @keyframes up {
+        100% {
+            top: 65px;
+            height: 41px;
+        }
+    }
+
+    .sand-down {
+        animation: down var(--animation-duration) linear forwards;
+    }
+
+    .sand-up {
+        animation: up var(--animation-duration) linear forwards;
     }
 </style>
