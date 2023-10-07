@@ -13,18 +13,19 @@
     function showDisplay() {
         timerMode = "display"
         
+        editValues = []
         editValues.push(Number(hours), Number(minutes), Number(seconds))
 
         if (hours <= 9) {
-            hours = `0${hours}`
+            hours = `0${Number(hours)}`
         }
 
         if (minutes <= 9) {
-            minutes = `0${minutes}`
+            minutes = `0${Number(minutes)}`
         }
 
         if (seconds <= 9) {
-            seconds = `0${seconds}`
+            seconds = `0${Number(seconds)}`
         }
 
         if (timerStyle === 'Default') {
@@ -77,14 +78,10 @@
     }
 
     function changeStyle() {
-        if (timerStyle === "Default") {
-            timerStyle = "Hourglass"
+        if (timerMode === "display") {
+            timerMode = "edit"
         } else {
-            if (timerMode === "edit") {
-                timerStyle = "Default"
-            } else {
-                timerMode = "edit"
-            }
+            timerStyle = timerStyle === "Default" ? "Hourglass" : "Default"
         }
 
         clearInterval(intervalRef)
