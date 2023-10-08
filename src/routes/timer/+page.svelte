@@ -81,7 +81,13 @@
         if (timerMode === "display") {
             timerMode = "edit"
         } else {
-            timerStyle = timerStyle === "Default" ? "Hourglass" : "Default"
+            if (timerStyle === "Default") {
+                timerStyle = "Hourglass"
+            } else if (timerStyle === "Hourglass") {
+                timerStyle = "Loading"
+            } else if (timerStyle === "Loading") {
+                timerStyle = "Default"
+            }
         }
 
         clearInterval(intervalRef)
@@ -131,6 +137,11 @@
                 </svg>
                 <div style={"top: 10px; height: 41px;" + ` --animation-duration: ${animationDuration}s`} class="top-sand sand-down"></div>
                 <div style={"top: 106px; height: 0px;" + ` --animation-duration: ${animationDuration}s`} class="bottom-sand sand-up"></div>
+            {/if}
+            {#if timerStyle === "Loading"}
+                <div id="loading-bar-container">
+                    <div id="loading-bar" style={`--animation-duration: ${animationDuration}s`}></div>
+                </div>
             {/if}
         {/if}
     </div>
@@ -189,6 +200,23 @@
         position: absolute;
         left: 10px;
     }
+    
+    #loading-bar-container {
+        background-color: white;
+        width: 150px;
+        height: 5px;
+        padding: 0.5rem;
+        position: relative;
+    }
+
+    #loading-bar {
+        background-color: green;
+        width: 0px;
+        height: 5px;
+        position: absolute;
+        left: 0.5rem;
+        animation: loading var(--animation-duration) linear forwards;
+    }
 
     @keyframes down {
         100% {
@@ -201,6 +229,12 @@
         100% {
             top: 65px;
             height: 41px;
+        }
+    }
+
+    @keyframes loading {
+        100% {
+            width: 150px;
         }
     }
 
