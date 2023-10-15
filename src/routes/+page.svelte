@@ -1,4 +1,12 @@
 <script>
+    let theme = 'light';
+
+    /** @type {import('./$types').Snapshot<string>} */
+    export const snapshot = {
+        capture: () => {theme},
+        restore: (newTheme) => theme = newTheme
+    };
+
     console.log("works!")
 
     let count = 0
